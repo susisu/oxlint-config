@@ -10,10 +10,23 @@
   "scripts": {
     "format": "oxfmt",
     "format:check": "oxfmt --check",
+    "lint": "oxlint --fix",
+    "lint:check": "oxlint",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "devDependencies": {
     "oxfmt": "^0.68.0",
+    "oxlint": "^1.83.0",
+    "oxlint-tsgolint": "^7.0.2002",
     "typescript": "^7.0.2"
+  },
+  "peerDependencies": {
+    "oxlint": "^1.83.0",
+    "oxlint-tsgolint": "^7.0.2002"
+  },
+  "peerDependenciesMeta": {
+    "oxlint-tsgolint": {
+      "optional": true
+    }
   }
 }
