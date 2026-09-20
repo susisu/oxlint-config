@@ -1,0 +1,1 @@
+# @susisu/oxlint-config
