@@ -1,0 +1,19 @@
+{
+  "name": "@susisu/oxlint-config",
+  "version": "0.0.0",
+  "description": "my oxlint config",
+  "license": "MIT",
+  "author": "Susisu <susisu2413@yahoo.co.jp>",
+  "repository": "https://github.com/susisu/oxlint-config.git",
+  "type": "module",
+  "sideEffects": false,
+  "scripts": {
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "devDependencies": {
+    "oxfmt": "^0.68.0",
+    "typescript": "^7.0.2"
+  }
+}
