@@ -1,6 +1,9 @@
-import type { ConfigOptions } from "./config.ts";
-import { config } from "./config.ts";
+import type { OxlintConfig } from "oxlint";
 
-export type { ConfigOptions };
-export { config };
+import { createConfig } from "./config.ts";
+import { preset } from "./preset.ts";
+import { ruleTable } from "./rule-table.generated.ts";
+
+export const config: (userConfig?: OxlintConfig) => OxlintConfig = createConfig(preset, ruleTable);
+
 export default config;

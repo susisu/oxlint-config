@@ -1,43 +1,72 @@
-import type { OxlintConfig } from "oxlint";
+import type { OxlintConfig, OxlintOverride } from "oxlint";
 import { defineConfig } from "oxlint";
 
-import { js as jsRules, ts as tsRules } from "./rules.ts";
+import type { Preset } from "./preset.ts";
+import type { PluginOverride, Resolved } from "./resolve.ts";
+import { resolve } from "./resolve.ts";
+import type { PluginName, RuleTable } from "./rule-table.ts";
+import { presetRules } from "./rules.ts";
 
-export type ConfigOptions = Readonly<
-  Partial<{
-    /** Enable type-aware linting. (default: true) */
-    typeAware: boolean | undefined;
-  }>
->;
+export function createConfig(
+  preset: Preset,
+  table: RuleTable,
+): (userConfig?: OxlintConfig) => OxlintConfig {
+  return (userConfig = {}) => {
+    const resolved = resolve(userConfig);
+    return defineConfig({
+      ...userConfig,
+      extends: [buildPreset(preset, table, resolved), ...(userConfig.extends ?? [])],
+    });
+  };
+}
 
-const preset: OxlintConfig = defineConfig({
-  plugins: ["typescript"],
-  overrides: [
+function buildPreset(preset: Preset, table: RuleTable, resolved: Resolved): OxlintConfig {
+  const overrides = resolved.pluginOverrides.flatMap((override) =>
+    buildOverride(preset, table, override, resolved),
+  );
+  return {
+    plugins: [],
+    rules: presetRules(
+      preset,
+      {
+        plugins: resolved.plugins,
+        categories: resolved.categories,
+        typeAware: resolved.typeAware,
+      },
+      table,
+    ),
+    ...(overrides.length > 0 ? { overrides } : {}),
+  };
+}
+
+function buildOverride(
+  preset: Preset,
+  table: RuleTable,
+  override: PluginOverride,
+  resolved: Resolved,
+): OxlintOverride[] {
+  const added = new Set<PluginName>(
+    [...override.plugins].filter((plugin) => !resolved.plugins.has(plugin)),
+  );
+  if (added.size === 0) {
+    return [];
+  }
+  const plugins = new Set<PluginName>([...resolved.plugins, ...added]);
+  return [
     {
-      files: ["**/*.{js,cjs,mjs,jsx}"],
-      rules: jsRules,
+      files: [...override.files],
+      ...(override.excludeFiles === undefined ? {} : { excludeFiles: [...override.excludeFiles] }),
+      plugins: [...added],
+      rules: presetRules(
+        preset,
+        {
+          plugins,
+          categories: resolved.categories,
+          typeAware: resolved.typeAware,
+          emitFor: added,
+        },
+        table,
+      ),
     },
-    {
-      files: ["**/*.{ts,tsx,cts,mts}"],
-      rules: tsRules,
-    },
-  ],
-});
-
-export function config(options?: ConfigOptions, userConfig?: OxlintConfig): OxlintConfig {
-  const typeAware = options?.typeAware ?? true;
-
-  return defineConfig({
-    ...userConfig,
-    extends: [preset, ...(userConfig?.extends ?? [])],
-    categories: {
-      correctness: "off",
-      ...userConfig?.categories,
-    },
-    options: {
-      typeAware,
-      reportUnusedDisableDirectives: "warn",
-      ...userConfig?.options,
-    },
-  });
+  ];
 }
