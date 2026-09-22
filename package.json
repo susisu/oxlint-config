@@ -5,8 +5,22 @@
   "license": "MIT",
   "author": "Susisu <susisu2413@yahoo.co.jp>",
   "repository": "https://github.com/susisu/oxlint-config.git",
+  "files": [
+    "lib",
+    "src",
+    "!src/**/*.{test,spec}.{ts,tsx}",
+    "!src/**/__tests__"
+  ],
   "type": "module",
   "sideEffects": false,
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "default": "./lib/index.js"
+    }
+  },
   "scripts": {
     "format": "oxfmt",
     "format:check": "oxfmt --check",
@@ -16,7 +30,9 @@
     "generate:rule-table": "node scripts/generate-rule-table.ts",
     "generate:rule-table:check": "node scripts/generate-rule-table.ts --check",
     "test": "vitest run",
-    "test:dev": "vitest dev"
+    "test:dev": "vitest dev",
+    "build": "tsc -p tsconfig.build.json",
+    "clean": "node -e \"fs.rmSync('lib', { recursive: true, force: true })\""
   },
   "devDependencies": {
     "@types/node": "^26.6.2",
