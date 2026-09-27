@@ -203,6 +203,34 @@ export const preset: Preset = {
         { lib: "always", path: "never", types: "prefer-import" },
       ],
       "typescript/unbound-method": ["error", { ignoreStatic: false }],
+
+      // # suspicious
+      "typescript/consistent-return": ["error", { treatUndefinedAsUnspecified: false }],
+      "typescript/no-confusing-non-null-assertion": "error",
+      "typescript/no-extraneous-class": [
+        "error",
+        {
+          allowConstructorOnly: false,
+          allowEmpty: false,
+          allowStaticOnly: false,
+          allowWithDecorator: false,
+        },
+      ],
+      "typescript/no-unnecessary-boolean-literal-compare": [
+        "error",
+        {
+          allowComparingNullableBooleansToFalse: true,
+          allowComparingNullableBooleansToTrue: true,
+        },
+      ],
+      "typescript/no-unnecessary-template-expression": "error",
+      "typescript/no-unnecessary-type-arguments": "error",
+      "typescript/no-unnecessary-type-assertion": ["error", { checkLiteralConstAssertions: true }],
+      "typescript/no-unnecessary-type-constraint": "error",
+      "typescript/no-unnecessary-type-conversion": "error",
+      "typescript/no-unnecessary-type-parameters": "error",
+      "typescript/no-unsafe-enum-comparison": "error",
+      "typescript/no-unsafe-type-assertion": "error",
     },
     supersedes: {
       "typescript/await-thenable": ["unicorn/no-unnecessary-await"],
