@@ -331,8 +331,7 @@ export const preset: Preset = {
       ],
       // readonly is preferred but too noisy
       "typescript/prefer-readonly-parameter-types": "off",
-      // replaced with typescript/ban-ts-comment
-      "typescript/prefer-ts-expect-error": "off",
+      "typescript/prefer-ts-expect-error": "error",
       "typescript/related-getter-setter-pairs": "error",
       "typescript/require-await": "warn",
       "typescript/restrict-plus-operands": [
@@ -360,6 +359,7 @@ export const preset: Preset = {
     },
     supersedes: {
       "typescript/await-thenable": ["unicorn/no-unnecessary-await"],
+      "typescript/ban-ts-comment": ["typescript/prefer-ts-expect-error"],
       "typescript/no-implied-eval": ["no-implied-eval"],
       "typescript/only-throw-error": ["no-throw-literal"],
       "typescript/prefer-promise-reject-errors": ["prefer-promise-reject-errors"],
