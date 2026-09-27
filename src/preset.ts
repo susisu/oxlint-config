@@ -259,6 +259,28 @@ export const preset: Preset = {
       "unicorn/no-useless-spread": "error",
       "unicorn/prefer-set-size": "error",
       "unicorn/prefer-string-starts-ends-with": "error",
+
+      // # suspicious
+      "unicorn/consistent-function-scoping": ["error", { checkArrowFunctions: true }],
+      "unicorn/no-accessor-recursion": "error",
+      "unicorn/no-array-fill-with-reference-type": "error",
+      "unicorn/no-array-reverse": ["error", { allowExpressionStatement: true }],
+      "unicorn/no-array-sort": [
+        "error",
+        { allowAfterSpread: true, allowExpressionStatement: true },
+      ],
+      "unicorn/no-confusing-array-with": "error",
+      "unicorn/no-instanceof-builtins": [
+        "error",
+        {
+          strategy: "loose",
+          // `Error.isError(x)` is not widely available (at 2026-09-27)
+          useErrorIsError: false,
+        },
+      ],
+      "unicorn/prefer-add-event-listener": "error",
+      "unicorn/require-module-specifiers": "error",
+      "unicorn/require-post-message-target-origin": "error",
     },
   },
 };
