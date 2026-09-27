@@ -99,7 +99,7 @@ export const preset: Preset = {
       "no-implied-eval": "error",
       "no-new": "error",
       "no-shadow": [
-        "error",
+        "warn",
         {
           builtinGlobals: true,
           hoist: "functions-and-types",
@@ -109,7 +109,7 @@ export const preset: Preset = {
         },
       ],
       "no-underscore-dangle": [
-        "error",
+        "warn",
         {
           allowAfterSuper: false,
           allowAfterThis: false,
@@ -230,9 +230,9 @@ export const preset: Preset = {
         },
       ],
       "typescript/no-unnecessary-template-expression": "error",
-      "typescript/no-unnecessary-type-arguments": "error",
-      "typescript/no-unnecessary-type-assertion": ["error", { checkLiteralConstAssertions: true }],
-      "typescript/no-unnecessary-type-constraint": "error",
+      "typescript/no-unnecessary-type-arguments": "warn",
+      "typescript/no-unnecessary-type-assertion": ["warn", { checkLiteralConstAssertions: true }],
+      "typescript/no-unnecessary-type-constraint": "warn",
       "typescript/no-unnecessary-type-conversion": "error",
       "typescript/no-unnecessary-type-parameters": "error",
       "typescript/no-unsafe-enum-comparison": "error",
@@ -269,7 +269,7 @@ export const preset: Preset = {
         "error",
         { allowAfterSpread: true, allowExpressionStatement: true },
       ],
-      "unicorn/no-confusing-array-with": "error",
+      "unicorn/no-confusing-array-with": "warn",
       "unicorn/no-instanceof-builtins": [
         "error",
         {

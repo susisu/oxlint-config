@@ -7,6 +7,6 @@ export default config({
   plugins: ["oxc", "unicorn", "typescript"],
   categories: {
     correctness: "error",
-    suspicious: "warn",
+    suspicious: "error",
   },
 });
