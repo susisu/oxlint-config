@@ -69,7 +69,7 @@ function listRules(): RuleTable {
 
 function render(version: string, table: RuleTable): string {
   const entries = Object.entries(table)
-    .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
+    .toSorted(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
     .map(([name, info]) => {
       const plugin = JSON.stringify(info.plugin);
       const category = JSON.stringify(info.category);
