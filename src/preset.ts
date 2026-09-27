@@ -191,6 +191,9 @@ export const preset: Preset = {
       "oxc/misrefactored-assign-op": "error",
       "oxc/no-async-endpoint-handlers": "error",
       "oxc/no-this-in-exported-function": "error",
+
+      // # pedantic
+      "oxc/branches-sharing-code": "off",
     },
   },
   typescript: {
