@@ -275,11 +275,94 @@ export const preset: Preset = {
       "typescript/no-unnecessary-type-parameters": "error",
       "typescript/no-unsafe-enum-comparison": "error",
       "typescript/no-unsafe-type-assertion": "error",
+
+      // # pedantic
+      "typescript/ban-ts-comment": [
+        "error",
+        {
+          "ts-check": false,
+          "ts-expect-error": "allow-with-description",
+          "ts-ignore": true,
+          "ts-nocheck": true,
+        },
+      ],
+      // deprecated
+      "typescript/ban-types": "off",
+      "typescript/no-confusing-void-expression": [
+        "error",
+        {
+          ignoreArrowShorthand: true,
+          ignoreVoidOperator: false,
+          ignoreVoidReturningFunctions: false,
+        },
+      ],
+      "typescript/no-deprecated": "warn",
+      "typescript/no-misused-promises": [
+        "error",
+        { checksConditionals: true, checksSpreads: true, checksVoidReturn: true },
+      ],
+      "typescript/no-mixed-enums": "error",
+      "typescript/no-unsafe-argument": "warn",
+      "typescript/no-unsafe-assignment": "warn",
+      "typescript/no-unsafe-call": "warn",
+      "typescript/no-unsafe-function-type": "error",
+      "typescript/no-unsafe-member-access": ["warn", { allowOptionalChaining: false }],
+      "typescript/no-unsafe-return": "warn",
+      "typescript/only-throw-error": [
+        "error",
+        { allowRethrowing: true, allowThrowingAny: false, allowThrowingUnknown: false },
+      ],
+      "typescript/prefer-enum-initializers": "error",
+      "typescript/prefer-includes": "error",
+      "typescript/prefer-nullish-coalescing": [
+        "warn",
+        {
+          ignoreBooleanCoercion: false,
+          ignoreConditionalTests: false,
+          ignoreIfStatements: false,
+          ignoreMixedLogicalExpressions: false,
+          ignorePrimitives: false,
+          ignoreTernaryTests: false,
+        },
+      ],
+      "typescript/prefer-promise-reject-errors": [
+        "error",
+        { allowEmptyReject: false, allowThrowingAny: false, allowThrowingUnknown: false },
+      ],
+      // readonly is preferred but too noisy
+      "typescript/prefer-readonly-parameter-types": "off",
+      // replaced with typescript/ban-ts-comment
+      "typescript/prefer-ts-expect-error": "off",
+      "typescript/related-getter-setter-pairs": "error",
+      "typescript/require-await": "warn",
+      "typescript/restrict-plus-operands": [
+        "error",
+        {
+          allowAny: false,
+          allowBoolean: false,
+          allowNullish: false,
+          allowNumberAndString: false,
+          allowRegExp: false,
+          skipCompoundAssignments: false,
+        },
+      ],
+      "typescript/return-await": ["error", "always"],
+      "typescript/strict-boolean-expressions": "off",
+      "typescript/strict-void-return": "error",
+      "typescript/switch-exhaustiveness-check": [
+        "warn",
+        {
+          allowDefaultCaseForExhaustiveSwitch: true,
+          considerDefaultExhaustiveForUnions: false,
+          requireDefaultForNonUnion: true,
+        },
+      ],
     },
     supersedes: {
       "typescript/await-thenable": ["unicorn/no-unnecessary-await"],
       "typescript/no-implied-eval": ["no-implied-eval"],
       "typescript/only-throw-error": ["no-throw-literal"],
+      "typescript/prefer-promise-reject-errors": ["prefer-promise-reject-errors"],
       "typescript/require-await": ["require-await"],
     },
   },
