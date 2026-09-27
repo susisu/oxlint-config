@@ -117,7 +117,11 @@ export const preset: Preset = {
       // correctness
       "typescript/await-thenable": "error",
       "typescript/no-array-delete": "error",
-      "typescript/no-base-to-string": ["error", { checkUnknown: false }],
+      "typescript/no-base-to-string": [
+        "error",
+        // allow `String(x)` on unkown values, e.g. caught errors (not strictly safe though)
+        { checkUnknown: false },
+      ],
       "typescript/no-duplicate-enum-values": "error",
       "typescript/no-duplicate-type-constituents": [
         "error",
