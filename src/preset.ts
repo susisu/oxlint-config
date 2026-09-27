@@ -93,6 +93,25 @@ export const preset: Preset = {
       "valid-typeof": ["error", { requireStringLiterals: true }],
     },
   },
+  oxc: {
+    rules: {
+      // correctness
+      "oxc/bad-array-method-on-arguments": "error",
+      "oxc/bad-char-at-comparison": "error",
+      "oxc/bad-comparison-sequence": "error",
+      "oxc/bad-match-all-arg": "error",
+      "oxc/bad-min-max-func": "error",
+      "oxc/bad-object-literal-comparison": "error",
+      "oxc/bad-replace-all-arg": "error",
+      "oxc/const-comparisons": "error",
+      "oxc/double-comparisons": "error",
+      "oxc/erasing-op": "error",
+      "oxc/missing-throw": "error",
+      "oxc/number-arg-out-of-range": "error",
+      "oxc/only-used-in-recursion": "error",
+      "oxc/uninvoked-array-callback": "error",
+    },
+  },
   typescript: {
     rules: {
       // correctness
