@@ -4,4 +4,8 @@ export default config({
   options: {
     typeAware: true,
   },
+  plugins: ["oxc", "unicorn", "typescript"],
+  categories: {
+    correctness: "error",
+  },
 });
