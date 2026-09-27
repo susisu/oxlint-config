@@ -164,7 +164,26 @@ export const preset: Preset = {
       "typescript/unbound-method": ["error", { ignoreStatic: false }],
     },
     supersedes: {
+      "typescript/await-thenable": ["unicorn/no-unnecessary-await"],
       "typescript/no-implied-eval": ["no-implied-eval"],
+    },
+  },
+  unicorn: {
+    rules: {
+      // correctness
+      "unicorn/no-await-in-promise-methods": "error",
+      "unicorn/no-empty-file": "error",
+      "unicorn/no-invalid-fetch-options": "error",
+      "unicorn/no-invalid-remove-event-listener": "error",
+      "unicorn/no-new-array": "error",
+      "unicorn/no-single-promise-in-promise-methods": "error",
+      "unicorn/no-thenable": "error",
+      "unicorn/no-unnecessary-await": "error",
+      "unicorn/no-useless-fallback-in-spread": "error",
+      "unicorn/no-useless-length-check": "error",
+      "unicorn/no-useless-spread": "error",
+      "unicorn/prefer-set-size": "error",
+      "unicorn/prefer-string-starts-ends-with": "error",
     },
   },
 };
