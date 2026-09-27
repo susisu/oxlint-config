@@ -163,5 +163,8 @@ export const preset: Preset = {
       ],
       "typescript/unbound-method": ["error", { ignoreStatic: false }],
     },
+    supersedes: {
+      "typescript/no-implied-eval": ["no-implied-eval"],
+    },
   },
 };
