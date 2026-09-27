@@ -12,7 +12,7 @@ export type Preset = Readonly<Partial<Record<PluginName, PluginPreset>>>;
 export const preset: Preset = {
   eslint: {
     rules: {
-      // correctness
+      // # correctness
       "constructor-super": "error",
       "for-direction": "error",
       "getter-return": "error",
@@ -91,11 +91,48 @@ export const preset: Preset = {
       "require-yield": "warn",
       "use-isnan": ["error", { enforceForIndexOf: true, enforceForSwitchCase: true }],
       "valid-typeof": ["error", { requireStringLiterals: true }],
+
+      // # suspicious
+      "block-scoped-var": "error",
+      "no-extend-native": "error",
+      "no-extra-bind": "error",
+      "no-implied-eval": "error",
+      "no-new": "error",
+      "no-shadow": [
+        "error",
+        {
+          builtinGlobals: true,
+          hoist: "functions-and-types",
+          ignoreFunctionTypeParameterNameValueShadow: true,
+          ignoreOnInitialization: false,
+          ignoreTypeValueShadow: true,
+        },
+      ],
+      "no-underscore-dangle": [
+        "error",
+        {
+          allowAfterSuper: false,
+          allowAfterThis: false,
+          allowAfterThisConstructor: false,
+          allowFunctionParams: false,
+          allowInArrayDestructuring: false,
+          allowInObjectDestructuring: false,
+          allowInUsingDeclarations: false,
+          enforceInClassFields: true,
+          enforceInMethodNames: true,
+        },
+      ],
+      "no-unexpected-multiline": "error",
+      "no-unmodified-loop-condition": ["error", { checkConditionalExpressions: false }],
+      "no-unneeded-ternary": ["error", { defaultAssignment: false }],
+      "no-useless-concat": "error",
+      "no-useless-constructor": "error",
+      "preserve-caught-error": ["error", { requireCatchParameter: true }],
     },
   },
   oxc: {
     rules: {
-      // correctness
+      // # correctness
       "oxc/bad-array-method-on-arguments": "error",
       "oxc/bad-char-at-comparison": "error",
       "oxc/bad-comparison-sequence": "error",
@@ -114,7 +151,7 @@ export const preset: Preset = {
   },
   typescript: {
     rules: {
-      // correctness
+      // # correctness
       "typescript/await-thenable": "error",
       "typescript/no-array-delete": "error",
       "typescript/no-base-to-string": [
@@ -174,7 +211,7 @@ export const preset: Preset = {
   },
   unicorn: {
     rules: {
-      // correctness
+      // # correctness
       "unicorn/no-await-in-promise-methods": "error",
       "unicorn/no-empty-file": "error",
       "unicorn/no-invalid-fetch-options": "error",
