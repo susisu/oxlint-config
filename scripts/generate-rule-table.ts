@@ -136,7 +136,7 @@ function reportDiff(version: string, table: RuleTable): void {
       ...(old.plugin !== info.plugin ? [`plugin: ${old.plugin} -> ${info.plugin}`] : []),
       ...(old.category !== info.category ? [`category: ${old.category} -> ${info.category}`] : []),
       ...(old.typeAware !== info.typeAware
-        ? [`typeAware: ${old.typeAware} -> ${info.typeAware}`]
+        ? [`typeAware: ${old.typeAware.toString()} -> ${info.typeAware.toString()}`]
         : []),
     ];
     return diffs.length > 0 ? [`  ~ ${name}  ${diffs.join(", ")}` + mark(name)] : [];
