@@ -147,6 +147,12 @@ export const preset: Preset = {
       "oxc/number-arg-out-of-range": "error",
       "oxc/only-used-in-recursion": "error",
       "oxc/uninvoked-array-callback": "error",
+
+      // # suspicious
+      "oxc/approx-constant": "error",
+      "oxc/misrefactored-assign-op": "error",
+      "oxc/no-async-endpoint-handlers": "error",
+      "oxc/no-this-in-exported-function": "error",
     },
   },
   typescript: {
