@@ -8,5 +8,6 @@ export default config({
   categories: {
     correctness: "error",
     suspicious: "error",
+    pedantic: "error",
   },
 });
