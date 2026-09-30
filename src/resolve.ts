@@ -5,7 +5,7 @@ import { isCategoryName, isPluginName } from "./rule-table.ts";
 
 export type Severity = "off" | "warn" | "error";
 
-export type Categories = Readonly<Record<CategoryName, Severity>>;
+export type Categories = Readonly<Partial<Record<CategoryName, Severity>>>;
 
 export type PluginOverride = Readonly<{
   files: readonly string[];
@@ -24,12 +24,6 @@ export const defaultPlugins: ReadonlySet<PluginName> = new Set(["unicorn", "type
 
 export const defaultCategories: Categories = {
   correctness: "warn",
-  nursery: "off",
-  pedantic: "off",
-  perf: "off",
-  restriction: "off",
-  style: "off",
-  suspicious: "off",
 };
 
 export function parseSeverity(value: unknown): Severity {
@@ -58,6 +52,10 @@ const severityRank: Readonly<Record<Severity, number>> = {
 
 export function minSeverity(a: Severity, b: Severity): Severity {
   return severityRank[a] <= severityRank[b] ? a : b;
+}
+
+export function maxSeverity(a: Severity, b: Severity): Severity {
+  return severityRank[a] >= severityRank[b] ? a : b;
 }
 
 export function resolve(config: OxlintConfig): Resolved {
@@ -113,7 +111,7 @@ export function resolve(config: OxlintConfig): Resolved {
 
   return {
     plugins,
-    categories: { ...defaultCategories, ...categories },
+    categories,
     typeAware: typeAware ?? false,
     pluginOverrides,
   };

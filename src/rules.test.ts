@@ -1,8 +1,9 @@
+import type { DummyRuleMap } from "oxlint";
 import { describe, expect, it } from "vitest";
 
 import type { Preset } from "./preset.ts";
-import type { Categories } from "./resolve.ts";
 import type { RuleTable } from "./rule-table.ts";
+import type { PresetRulesParams } from "./rules.ts";
 import { presetRules } from "./rules.ts";
 
 const table: RuleTable = {
@@ -12,26 +13,6 @@ const table: RuleTable = {
   "typescript/no-implied-eval": { plugin: "typescript", category: "correctness", typeAware: true },
   "typescript/no-explicit-any": { plugin: "typescript", category: "restriction", typeAware: false },
   "react/jsx-key": { plugin: "react", category: "correctness", typeAware: false },
-};
-
-const allOff: Categories = {
-  correctness: "off",
-  nursery: "off",
-  pedantic: "off",
-  perf: "off",
-  restriction: "off",
-  style: "off",
-  suspicious: "off",
-};
-
-const allOn: Categories = {
-  correctness: "error",
-  nursery: "error",
-  pedantic: "error",
-  perf: "error",
-  restriction: "error",
-  style: "error",
-  suspicious: "error",
 };
 
 const preset: Preset = {
@@ -45,7 +26,7 @@ const preset: Preset = {
   typescript: {
     rules: {
       "typescript/no-implied-eval": "error",
-      "typescript/no-explicit-any": "off",
+      "typescript/no-explicit-any": "warn",
     },
     supersedes: {
       "typescript/no-implied-eval": ["no-implied-eval"],
@@ -57,168 +38,142 @@ const preset: Preset = {
 };
 
 const eslint = new Set(["eslint"] as const);
-const eslintTs = new Set(["eslint", "typescript"] as const);
+
+const baseParams: PresetRulesParams = {
+  plugins: new Set(["eslint", "typescript"]),
+  categories: { correctness: "error" },
+  typeAware: true,
+};
+
+function run(params: Partial<PresetRulesParams>, p: Preset = preset): DummyRuleMap {
+  return presetRules(p, { ...baseParams, ...params }, table);
+}
 
 describe("presetRules", () => {
-  it("emits nothing when every category is off", () => {
-    expect(
-      presetRules(preset, { plugins: eslintTs, categories: allOff, typeAware: true }, table),
-    ).toEqual({});
-  });
+  describe("severity", () => {
+    describe("of a rule whose category is set explicitly", () => {
+      it("is the lower of the category severity and the entry severity", () => {
+        expect(
+          run({
+            plugins: eslint,
+            categories: { correctness: "warn", pedantic: "error", suspicious: "error" },
+          }),
+        ).toEqual({
+          "no-debugger": "warn",
+          eqeqeq: ["error", "smart"],
+          "no-implied-eval": "warn",
+        });
+      });
 
-  it("emits entries of enabled plugins and categories, capped by the entry severity", () => {
-    const categories: Categories = { ...allOff, correctness: "error", pedantic: "warn" };
-    const rules = presetRules(preset, { plugins: eslintTs, categories, typeAware: false }, table);
-    expect(rules).toEqual({
-      "no-debugger": "error",
-      eqeqeq: ["warn", "smart"],
+      it("is off when the category is off, and the entry is skipped", () => {
+        expect(
+          run({ plugins: eslint, categories: { correctness: "error", pedantic: "off" } }),
+        ).not.toHaveProperty("eqeqeq");
+      });
+    });
+
+    describe("of a rule whose category is not set explicitly", () => {
+      it("is the lower of the highest category severity and the entry severity", () => {
+        expect(run({ plugins: eslint, categories: { perf: "error" } })).toEqual({
+          "no-debugger": "error",
+          eqeqeq: ["error", "smart"],
+          "no-implied-eval": "warn",
+        });
+        expect(run({ plugins: eslint, categories: { perf: "warn" } })).toEqual({
+          "no-debugger": "warn",
+          eqeqeq: ["warn", "smart"],
+          "no-implied-eval": "warn",
+        });
+      });
+
+      it("counts correctness as warn unless it is set explicitly", () => {
+        expect(run({ plugins: eslint, categories: {} })).toEqual({
+          "no-debugger": "warn",
+          eqeqeq: ["warn", "smart"],
+          "no-implied-eval": "warn",
+        });
+      });
+
+      it("is off when every category is off, and the entry is skipped", () => {
+        expect(run({ plugins: eslint, categories: { correctness: "off" } })).toEqual({});
+      });
     });
   });
 
-  it("never raises the severity above the category", () => {
-    const categories: Categories = { ...allOff, correctness: "warn" };
-    const rules = presetRules(preset, { plugins: eslint, categories, typeAware: false }, table);
-    expect(rules).toEqual({ "no-debugger": "warn" });
-  });
-
-  it("emits off entries while the category is on", () => {
-    const categories: Categories = { ...allOff, restriction: "error" };
-    const rules = presetRules(preset, { plugins: eslintTs, categories, typeAware: false }, table);
-    expect(rules).toEqual({ "typescript/no-explicit-any": "off" });
-  });
-
-  it("skips plugins that are not enabled", () => {
-    const rules = presetRules(
-      preset,
-      { plugins: eslint, categories: allOn, typeAware: true },
-      table,
-    );
+  it("skips rules of plugins that are not enabled", () => {
+    const rules = run({ plugins: eslint });
     expect(rules).not.toHaveProperty("typescript/no-implied-eval");
     expect(rules).not.toHaveProperty("react/jsx-key");
   });
 
   it("skips type-aware rules when type-aware linting is off", () => {
-    const rules = presetRules(
-      preset,
-      { plugins: eslintTs, categories: allOn, typeAware: false },
-      table,
-    );
-    expect(rules).not.toHaveProperty("typescript/no-implied-eval");
+    expect(run({ typeAware: false })).not.toHaveProperty("typescript/no-implied-eval");
   });
 
   describe("supersedes", () => {
     it("turns off superseded rules when the superseding rule is active", () => {
-      const rules = presetRules(
-        preset,
-        { plugins: eslintTs, categories: allOn, typeAware: true },
-        table,
-      );
+      const rules = run({});
       expect(rules["typescript/no-implied-eval"]).toBe("error");
       expect(rules["no-implied-eval"]).toBe("off");
     });
 
-    it("leaves superseded rules alone when the superseding rule is not active", () => {
+    it("leaves superseded rules alone when the superseding rule is skipped", () => {
+      expect(run({ plugins: eslint })["no-implied-eval"]).toBe("warn");
+      expect(run({ typeAware: false })["no-implied-eval"]).toBe("warn");
       expect(
-        presetRules(preset, { plugins: eslintTs, categories: allOn, typeAware: false }, table)[
-          "no-implied-eval"
-        ],
-      ).toBe("warn");
-      expect(
-        presetRules(preset, { plugins: eslint, categories: allOn, typeAware: true }, table)[
-          "no-implied-eval"
-        ],
-      ).toBe("warn");
-      expect(
-        presetRules(
-          preset,
-          { plugins: eslintTs, categories: { ...allOn, correctness: "off" }, typeAware: true },
-          table,
-        )["no-implied-eval"],
+        run({ categories: { correctness: "off", suspicious: "error" } })["no-implied-eval"],
       ).toBe("warn");
     });
 
-    it("does not turn off when the superseding rule is set off in the preset", () => {
-      const off: Preset = {
+    it("treats a superseding rule without an entry as active when its category is enabled", () => {
+      const noEntry: Preset = {
         typescript: {
-          rules: { "typescript/no-implied-eval": "off" },
           supersedes: { "typescript/no-implied-eval": ["no-implied-eval"] },
         },
       };
-      const rules = presetRules(
-        off,
-        { plugins: eslintTs, categories: allOn, typeAware: true },
-        table,
-      );
-      expect(rules).toEqual({ "typescript/no-implied-eval": "off" });
+      expect(run({ categories: { suspicious: "error" } }, noEntry)).toEqual({
+        "no-implied-eval": "off",
+      });
+      expect(run({ categories: { correctness: "off", suspicious: "error" } }, noEntry)).toEqual({});
     });
   });
 
   describe("emitFor", () => {
     it("emits entries only for the given plugins", () => {
-      const rules = presetRules(
-        preset,
-        { plugins: eslintTs, categories: allOn, typeAware: true, emitFor: new Set(["typescript"]) },
-        table,
-      );
-      expect(rules).toEqual({
+      expect(run({ emitFor: new Set(["typescript"]) })).toEqual({
         "typescript/no-implied-eval": "error",
-        "typescript/no-explicit-any": "off",
+        "typescript/no-explicit-any": "warn",
         "no-implied-eval": "off", // superseded
       });
     });
 
     it("turns off a superseded rule of an emitted plugin", () => {
-      const rules = presetRules(
-        preset,
-        { plugins: eslintTs, categories: allOn, typeAware: true, emitFor: new Set(["eslint"]) },
-        table,
-      );
+      const rules = run({ emitFor: new Set(["eslint"]) });
       expect(rules["no-implied-eval"]).toBe("off");
       expect(rules).not.toHaveProperty("typescript/no-implied-eval");
     });
 
     it("does not repeat a superseded rule when neither plugin is emitted", () => {
-      const rules = presetRules(
-        preset,
-        { plugins: eslintTs, categories: allOn, typeAware: true, emitFor: new Set(["react"]) },
-        table,
-      );
-      expect(rules).toEqual({});
+      expect(run({ emitFor: new Set(["react"]) })).toEqual({});
     });
   });
 
   describe("validation", () => {
     it("rejects unknown rule names", () => {
+      expect(() => run({}, { eslint: { rules: { "no-such-rule": "error" } } })).toThrow(
+        "Unknown rule in preset: no-such-rule",
+      );
       expect(() =>
-        presetRules(
-          { eslint: { rules: { "no-such-rule": "error" } } },
-          { plugins: eslint, categories: allOn, typeAware: false },
-          table,
-        ),
-      ).toThrow("Unknown rule in preset: no-such-rule");
-      expect(() =>
-        presetRules(
-          { eslint: { supersedes: { "no-debugger": ["no-such-rule"] } } },
-          { plugins: eslint, categories: allOn, typeAware: false },
-          table,
-        ),
+        run({}, { eslint: { supersedes: { "no-debugger": ["no-such-rule"] } } }),
       ).toThrow("Unknown rule in preset: no-such-rule");
     });
 
     it("rejects rules that belong to another plugin", () => {
+      expect(() => run({}, { eslint: { rules: { "react/jsx-key": "error" } } })).toThrow(
+        "Rule react/jsx-key does not belong to plugin eslint",
+      );
       expect(() =>
-        presetRules(
-          { eslint: { rules: { "react/jsx-key": "error" } } },
-          { plugins: eslint, categories: allOn, typeAware: false },
-          table,
-        ),
-      ).toThrow("Rule react/jsx-key does not belong to plugin eslint");
-      expect(() =>
-        presetRules(
-          { eslint: { supersedes: { "react/jsx-key": ["no-debugger"] } } },
-          { plugins: eslint, categories: allOn, typeAware: false },
-          table,
-        ),
+        run({}, { eslint: { supersedes: { "react/jsx-key": ["no-debugger"] } } }),
       ).toThrow("Rule react/jsx-key does not belong to plugin eslint");
     });
   });

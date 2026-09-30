@@ -2,8 +2,8 @@ import type { DummyRule, DummyRuleMap } from "oxlint";
 
 import type { Preset } from "./preset.ts";
 import type { Categories, Severity } from "./resolve.ts";
-import { minSeverity, parseSeverity } from "./resolve.ts";
-import type { PluginName, RuleInfo, RuleTable } from "./rule-table.ts";
+import { defaultCategories, maxSeverity, minSeverity, parseSeverity } from "./resolve.ts";
+import type { CategoryName, PluginName, RuleInfo, RuleTable } from "./rule-table.ts";
 
 export type PresetRulesParams = Readonly<{
   plugins: ReadonlySet<PluginName>;
@@ -28,12 +28,20 @@ export function presetRules(
     return info;
   };
 
-  const activeSeverity = (info: RuleInfo): Severity => {
-    if (!params.plugins.has(info.plugin) || (info.typeAware && !params.typeAware)) {
-      return "off";
-    }
-    return params.categories[info.category];
-  };
+  const effectiveCategories: Categories = { ...defaultCategories, ...params.categories };
+  const maxCategorySeverity = Object.values(effectiveCategories).reduce<Severity>(
+    (acc, severity) => maxSeverity(acc, severity),
+    "off",
+  );
+
+  const isAvailable = (info: RuleInfo): boolean =>
+    params.plugins.has(info.plugin) && (!info.typeAware || params.typeAware);
+
+  const presetSeverity = (info: RuleInfo, entry: DummyRule): Severity =>
+    minSeverity(params.categories[info.category] ?? maxCategorySeverity, severityOf(entry));
+
+  const isCategoryEnabled = (category: CategoryName): boolean =>
+    (effectiveCategories[category] ?? "off") !== "off";
 
   for (const plugin of emitFor) {
     for (const [name, entry] of Object.entries(preset[plugin]?.rules ?? {})) {
@@ -44,11 +52,14 @@ export function presetRules(
       if (info.plugin !== plugin) {
         throw new Error(`Rule ${name} does not belong to plugin ${plugin}`);
       }
-      const severity = activeSeverity(info);
+      if (!isAvailable(info)) {
+        continue;
+      }
+      const severity = presetSeverity(info, entry);
       if (severity === "off") {
         continue;
       }
-      rules[name] = withSeverity(entry, minSeverity(severity, severityOf(entry)));
+      rules[name] = withSeverity(entry, severity);
     }
   }
 
@@ -59,11 +70,12 @@ export function presetRules(
         throw new Error(`Rule ${name} does not belong to plugin ${plugin}`);
       }
       const entry = preset[plugin]?.rules?.[name];
-      const severity = minSeverity(
-        activeSeverity(info),
-        entry === undefined ? "error" : severityOf(entry),
-      );
-      if (severity === "off") {
+      const isActive =
+        isAvailable(info)
+        && (entry !== undefined
+          ? presetSeverity(info, entry) !== "off"
+          : isCategoryEnabled(info.category));
+      if (!isActive) {
         continue;
       }
       for (const supersededName of superseded) {

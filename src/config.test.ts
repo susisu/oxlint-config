@@ -18,9 +18,9 @@ const table: RuleTable = {
 const preset: Preset = {
   eslint: {
     rules: {
-      "no-debugger": "warn",
+      "no-debugger": "error",
       eqeqeq: ["error", "smart"],
-      "no-implied-eval": "error",
+      "no-implied-eval": "warn",
     },
   },
   typescript: {
@@ -28,7 +28,7 @@ const preset: Preset = {
     supersedes: { "typescript/no-implied-eval": ["no-implied-eval"] },
   },
   unicorn: {
-    rules: { "unicorn/no-null": "off" },
+    rules: { "unicorn/no-null": "warn" },
   },
   react: {
     rules: { "react/jsx-key": "error" },
@@ -56,7 +56,13 @@ describe("createConfig", () => {
       extends: [
         {
           plugins: [],
-          rules: { "no-debugger": "warn", "react/jsx-key": "error" },
+          rules: {
+            "no-debugger": "error",
+            eqeqeq: ["error", "smart"],
+            "no-implied-eval": "warn",
+            "react/jsx-key": "error",
+            "unicorn/no-null": "warn",
+          },
         },
         shared,
       ],
@@ -69,7 +75,12 @@ describe("createConfig", () => {
       extends: [
         {
           plugins: [],
-          rules: { "no-debugger": "warn" },
+          rules: {
+            "no-debugger": "warn",
+            eqeqeq: ["warn", "smart"],
+            "no-implied-eval": "warn",
+            "unicorn/no-null": "warn",
+          },
         },
       ],
     });
@@ -77,28 +88,32 @@ describe("createConfig", () => {
 
   it("emits preset rules for the plugins and categories resolved from the extends tree", () => {
     const result = config({
-      extends: [{ categories: { correctness: "off", style: "warn" } }],
+      extends: [{ categories: { correctness: "off", style: "error" } }],
       plugins: ["react"],
       categories: { correctness: "error" },
     });
     expect(result.extends?.[0]?.rules).toEqual({
-      "no-debugger": "warn",
+      "no-debugger": "error",
+      eqeqeq: ["error", "smart"],
+      "no-implied-eval": "warn",
       "react/jsx-key": "error",
-      "unicorn/no-null": "off",
+      "unicorn/no-null": "warn",
     });
   });
 
-  it("turns off superseded rules when type-aware linting is on", () => {
+  it("turns off superseded rules only when the superseding rule is active", () => {
     const user: OxlintConfig = {
       plugins: ["typescript"],
       categories: { correctness: "error", suspicious: "error" },
     };
     expect(config(user).extends?.[0]?.rules).toEqual({
-      "no-debugger": "warn",
-      "no-implied-eval": "error",
+      "no-debugger": "error",
+      eqeqeq: ["error", "smart"],
+      "no-implied-eval": "warn",
     });
     expect(config({ ...user, options: { typeAware: true } }).extends?.[0]?.rules).toEqual({
-      "no-debugger": "warn",
+      "no-debugger": "error",
+      eqeqeq: ["error", "smart"],
       "no-implied-eval": "off",
       "typescript/no-implied-eval": "error",
     });
@@ -183,8 +198,9 @@ describe("createConfig", () => {
         overrides: [{ files: ["**/*.ts"], plugins: ["typescript"] }],
       });
       expect(result.extends?.[0]?.rules).toEqual({
-        "no-debugger": "warn",
-        "no-implied-eval": "error",
+        "no-debugger": "error",
+        eqeqeq: ["error", "smart"],
+        "no-implied-eval": "warn",
       });
       expect(result.extends?.[0]?.overrides).toEqual([
         {

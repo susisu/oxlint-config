@@ -1,13 +1,7 @@
 import type { OxlintConfig } from "oxlint";
 import { describe, expect, it } from "vitest";
 
-import {
-  defaultCategories,
-  defaultPlugins,
-  minSeverity,
-  parseSeverity,
-  resolve,
-} from "./resolve.ts";
+import { defaultPlugins, maxSeverity, minSeverity, parseSeverity, resolve } from "./resolve.ts";
 
 describe("parseSeverity", () => {
   it("maps all spellings to three severities", () => {
@@ -47,6 +41,22 @@ describe("minSeverity", () => {
   });
 });
 
+describe("maxSeverity", () => {
+  it("returns the higher severity", () => {
+    // maxSeverity(x, x) === x
+    expect(maxSeverity("warn", "warn")).toBe("warn");
+
+    // maxSeverity(x, y) === maxSeverity(y, x)
+    expect(maxSeverity("error", "warn")).toBe("error");
+    expect(maxSeverity("warn", "error")).toBe("error");
+
+    // off <= warn <= error
+    expect(maxSeverity("off", "warn")).toBe("warn");
+    expect(maxSeverity("off", "error")).toBe("error");
+    expect(maxSeverity("warn", "error")).toBe("error");
+  });
+});
+
 describe("resolve", () => {
   describe("plugins", () => {
     it("uses the default plugins when omitted", () => {
@@ -78,8 +88,9 @@ describe("resolve", () => {
   });
 
   describe("categories", () => {
-    it("defaults correctness to warn and others to off", () => {
-      expect(resolve({}).categories).toEqual(defaultCategories);
+    it("contains only the categories set explicitly", () => {
+      expect(resolve({}).categories).toEqual({});
+      expect(resolve({ categories: { pedantic: "off" } }).categories).toEqual({ pedantic: "off" });
     });
 
     it("normalizes severities", () => {
