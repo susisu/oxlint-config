@@ -361,11 +361,14 @@ export const preset: Preset = {
       ],
     },
     supersedes: {
+      // # correctness
       "typescript/await-thenable": ["unicorn/no-unnecessary-await"],
-      "typescript/ban-ts-comment": ["typescript/prefer-ts-expect-error"],
-      "typescript/no-extraneous-class": ["unicorn/no-static-only-class"],
       "typescript/no-implied-eval": ["no-implied-eval"],
       "typescript/no-this-alias": ["unicorn/no-this-assignment"],
+      // # suspicious
+      "typescript/no-extraneous-class": ["unicorn/no-static-only-class"],
+      // # pedantic
+      "typescript/ban-ts-comment": ["typescript/prefer-ts-expect-error"],
       "typescript/only-throw-error": ["no-throw-literal"],
       "typescript/prefer-promise-reject-errors": ["prefer-promise-reject-errors"],
       "typescript/require-await": ["require-await"],
@@ -461,6 +464,7 @@ export const preset: Preset = {
       // "unicorn/require-number-to-fixed-digits-argument": "off",
     },
     supersedes: {
+      // # pedantic
       "unicorn/no-instanceof-builtins": ["unicorn/no-instanceof-array"],
     },
   },
