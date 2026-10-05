@@ -263,6 +263,7 @@ export const preset: Preset = {
           allowWithDecorator: false,
         },
       ],
+      "typescript/no-generated-empty-object-type": "off",
       "typescript/no-unnecessary-boolean-literal-compare": [
         "error",
         {
