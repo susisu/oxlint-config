@@ -203,6 +203,10 @@ export const preset: Preset = {
       "no-var": "error",
       "no-void": ["error", { allowAsStatement: false }],
       "unicode-bom": ["error", "never"],
+
+      // # perf
+      "no-await-in-loop": "warn",
+      "no-useless-call": "error",
     },
   },
   oxc: {
@@ -239,6 +243,10 @@ export const preset: Preset = {
       "oxc/no-const-enum": "error",
       // "oxc/no-optional-chaining": "off",
       // "oxc/no-rest-spread-properties": "off",
+
+      // # perf
+      // "oxc/no-accumulating-spread": "off",
+      // "oxc/no-map-spread": "off",
     },
   },
   typescript: {
@@ -575,6 +583,11 @@ export const preset: Preset = {
       // "unicorn/prefer-module": "off",
       "unicorn/prefer-node-protocol": "error",
       "unicorn/prefer-number-properties": ["error", { checkInfinity: false, checkNaN: false }],
+
+      // # perf
+      "unicorn/prefer-array-find": "warn",
+      "unicorn/prefer-array-flat-map": "warn",
+      "unicorn/prefer-set-has": "warn",
     },
   },
 };
