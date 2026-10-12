@@ -8,4 +8,12 @@ export default config({
   categories: {
     correctness: "error",
   },
+  overrides: [
+    {
+      files: ["scripts/**/*.ts"],
+      rules: {
+        "no-console": "off",
+      },
+    },
+  ],
 });
