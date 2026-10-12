@@ -231,6 +231,14 @@ export const preset: Preset = {
 
       // # pedantic
       // "oxc/branches-sharing-code": "off",
+
+      // # restriction
+      "oxc/bad-bitwise-operator": "error",
+      // "oxc/no-async-await": "off",
+      // "oxc/no-barrel-file": "off",
+      "oxc/no-const-enum": "error",
+      // "oxc/no-optional-chaining": "off",
+      // "oxc/no-rest-spread-properties": "off",
     },
   },
   typescript: {
@@ -397,7 +405,7 @@ export const preset: Preset = {
         },
       ],
 
-      // # restrictions
+      // # restriction
       "typescript/explicit-function-return-type": [
         "error",
         {
