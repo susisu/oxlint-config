@@ -559,10 +559,27 @@ export const preset: Preset = {
       "unicorn/prefer-top-level-await": "warn",
       "unicorn/prefer-type-error": "warn",
       "unicorn/require-number-to-fixed-digits-argument": "warn",
+
+      // # restriction
+      // "unicorn/import-style": "off",
+      "unicorn/no-abusive-eslint-disable": "error",
+      "unicorn/no-anonymous-default-export": "warn",
+      "unicorn/no-array-for-each": "error",
+      // "unicorn/no-array-reduce": "off",
+      "unicorn/no-document-cookie": "warn",
+      "unicorn/no-length-as-slice-end": "warn",
+      // "unicorn/no-magic-array-flat-depth": "off",
+      "unicorn/no-process-exit": "warn",
+      "unicorn/no-useless-error-capture-stack-trace": "warn",
+      "unicorn/prefer-modern-math-apis": "warn",
+      // "unicorn/prefer-module": "off",
+      "unicorn/prefer-node-protocol": "error",
+      "unicorn/prefer-number-properties": ["error", { checkInfinity: false, checkNaN: false }],
     },
     supersedes: {
       // # pedantic
       "unicorn/no-instanceof-builtins": ["unicorn/no-instanceof-array"],
+      "unicorn/no-unnecessary-slice-end": ["unicorn/no-length-as-slice-end"],
     },
   },
 };
