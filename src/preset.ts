@@ -328,7 +328,7 @@ export const preset: Preset = {
         },
       ],
       // deprecated
-      // "typescript/ban-types": "off",
+      "typescript/ban-types": "off",
       "typescript/no-confusing-void-expression": [
         "error",
         {
