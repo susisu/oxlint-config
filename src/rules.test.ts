@@ -65,10 +65,28 @@ describe("presetRules", () => {
         });
       });
 
-      it("is off when the category is off, and the entry is skipped", () => {
+      it("is off when the category is off", () => {
         expect(
           run({ plugins: eslint, categories: { correctness: "error", pedantic: "off" } }),
-        ).not.toHaveProperty("eqeqeq");
+        ).toEqual({
+          "no-debugger": "error",
+          eqeqeq: "off",
+          "no-implied-eval": "warn",
+        });
+      });
+
+      it("is off when the entry is off", () => {
+        const withOff: Preset = {
+          eslint: {
+            rules: { "no-debugger": "off", eqeqeq: ["off", "smart"] },
+          },
+        };
+        expect(
+          run({ plugins: eslint, categories: { correctness: "error", pedantic: "warn" } }, withOff),
+        ).toEqual({
+          "no-debugger": "off",
+          eqeqeq: "off",
+        });
       });
     });
 
@@ -94,8 +112,12 @@ describe("presetRules", () => {
         });
       });
 
-      it("is off when every category is off, and the entry is skipped", () => {
-        expect(run({ plugins: eslint, categories: { correctness: "off" } })).toEqual({});
+      it("is off when every category is off", () => {
+        expect(run({ plugins: eslint, categories: { correctness: "off" } })).toEqual({
+          "no-debugger": "off",
+          eqeqeq: "off",
+          "no-implied-eval": "off",
+        });
       });
     });
   });

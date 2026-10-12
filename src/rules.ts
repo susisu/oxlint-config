@@ -55,11 +55,7 @@ export function presetRules(
       if (!isAvailable(info)) {
         continue;
       }
-      const severity = presetSeverity(info, entry);
-      if (severity === "off") {
-        continue;
-      }
-      rules[name] = withSeverity(entry, severity);
+      rules[name] = withSeverity(entry, presetSeverity(info, entry));
     }
   }
 
@@ -95,5 +91,5 @@ function severityOf(rule: DummyRule): Severity {
 }
 
 function withSeverity(rule: DummyRule, severity: Severity): DummyRule {
-  return Array.isArray(rule) ? [severity, ...rule.slice(1)] : severity;
+  return Array.isArray(rule) && severity !== "off" ? [severity, ...rule.slice(1)] : severity;
 }
