@@ -186,7 +186,7 @@ async function main(): Promise<void> {
   reportDiff(version, table);
 }
 
-await main().catch((err) => {
+await main().catch((err: unknown) => {
   console.error(err);
   process.exitCode = 1;
 });
