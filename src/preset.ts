@@ -540,6 +540,53 @@ export const preset: Preset = {
         },
       ],
       "typescript/use-unknown-in-catch-callback-variable": "warn",
+
+      // # style
+      "typescript/adjacent-overload-signatures": "error",
+      "typescript/array-type": ["error", { default: "array-simple", readonly: "array-simple" }],
+      // "typescript/ban-tslint-comment": "off",
+      // "typescript/class-literal-property-style": "off",
+      // "typescript/consistent-generic-constructors": "off",
+      // "typescript/consistent-indexed-object-style": "off",
+      "typescript/consistent-type-assertions": [
+        "error",
+        {
+          assertionStyle: "as",
+          arrayLiteralTypeAssertions: "allow-as-parameter",
+          objectLiteralTypeAssertions: "allow-as-parameter",
+        },
+      ],
+      "typescript/consistent-type-definitions": ["error", "type"],
+      "typescript/consistent-type-exports": [
+        "error",
+        { fixMixedExportsWithInlineTypeSpecifier: false },
+      ],
+      "typescript/consistent-type-imports": [
+        "error",
+        {
+          prefer: "type-imports",
+          disallowTypeAnnotations: true,
+          fixStyle: "separate-type-imports",
+        },
+      ],
+      // "typescript/dot-notation": "off",
+      // "typescript/method-signature-style": "off",
+      "typescript/no-empty-interface": "off", // deprecated
+      // "typescript/no-inferrable-types": "off",
+      "typescript/no-unnecessary-qualifier": "error",
+      "typescript/parameter-properties": ["error", { prefer: "class-property" }],
+      "typescript/prefer-find": "error",
+      "typescript/prefer-for-of": "error",
+      "typescript/prefer-function-type": "error",
+      "typescript/prefer-readonly": "error",
+      "typescript/prefer-reduce-type-parameter": "error",
+      "typescript/prefer-regexp-exec": "warn",
+      "typescript/prefer-return-this-type": "error",
+      "typescript/prefer-string-starts-ends-with": "error",
+      "typescript/unified-signatures": [
+        "warn",
+        { ignoreDifferentlyNamedParameters: false, ignoreOverloadsWithDifferentJSDoc: false },
+      ],
     },
     supersedes: {
       // # correctness
@@ -553,6 +600,8 @@ export const preset: Preset = {
       "typescript/only-throw-error": ["no-throw-literal"],
       "typescript/prefer-promise-reject-errors": ["prefer-promise-reject-errors"],
       "typescript/require-await": ["require-await"],
+      // # style
+      "typescript/prefer-find": ["unicorn/prefer-array-find"],
     },
   },
   unicorn: {
@@ -661,7 +710,7 @@ export const preset: Preset = {
       "unicorn/prefer-number-properties": ["error", { checkInfinity: false, checkNaN: false }],
 
       // # perf
-      "unicorn/prefer-array-find": "warn",
+      "unicorn/prefer-array-find": "error",
       "unicorn/prefer-array-flat-map": "warn",
       "unicorn/prefer-set-has": "warn",
     },
