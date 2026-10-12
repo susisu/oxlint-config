@@ -327,8 +327,7 @@ export const preset: Preset = {
           "ts-nocheck": true,
         },
       ],
-      // deprecated
-      "typescript/ban-types": "off",
+      "typescript/ban-types": "off", // deprecated
       "typescript/no-confusing-void-expression": [
         "error",
         {
@@ -397,6 +396,58 @@ export const preset: Preset = {
           requireDefaultForNonUnion: true,
         },
       ],
+
+      // # restrictions
+      "typescript/explicit-function-return-type": [
+        "error",
+        {
+          allowConciseArrowFunctionExpressionsStartingWithVoid: false,
+          allowDirectConstAssertionInArrowFunctions: false,
+          allowExpressions: true,
+          allowFunctionsWithoutTypeParameters: false,
+          allowHigherOrderFunctions: true,
+          allowIIFEs: false,
+          allowTypedFunctionExpressions: true,
+        },
+      ],
+      "typescript/explicit-member-accessibility": ["error", { accessibility: "no-public" }],
+      "typescript/explicit-module-boundary-types": [
+        "warn",
+        {
+          allowArgumentsExplicitlyTypedAsAny: false,
+          allowDirectConstAssertionInArrowFunctions: false,
+          allowHigherOrderFunctions: true,
+          allowOverloadFunctions: false,
+          allowTypedFunctionExpressions: true,
+        },
+      ],
+      // "typescript/no-dynamic-delete": "off",
+      // "typescript/no-empty-object-type": "off",
+      "typescript/no-explicit-any": ["warn", { fixToUnknown: false, ignoreRestArgs: false }],
+      "typescript/no-import-type-side-effects": "error",
+      "typescript/no-invalid-void-type": [
+        "error",
+        { allowAsThisParameter: false, allowInGenericTypeArguments: true },
+      ],
+      "typescript/no-namespace": ["error", { allowDeclarations: true, allowDefinitionFiles: true }],
+      "typescript/no-non-null-asserted-nullish-coalescing": "error",
+      "typescript/no-non-null-assertion": "warn",
+      "typescript/no-require-imports": ["error", { allowAsImport: false }],
+      // "typescript/no-restricted-types": "off",
+      "typescript/no-var-requires": "off", // deprecated
+      "typescript/non-nullable-type-assertion-style": "error",
+      // "typescript/prefer-literal-enum-member": "off",
+      "typescript/promise-function-async": [
+        "warn",
+        {
+          allowAny: true,
+          checkArrowFunctions: true,
+          checkFunctionDeclarations: true,
+          checkFunctionExpressions: true,
+          checkMethodDeclarations: true,
+        },
+      ],
+      "typescript/use-unknown-in-catch-callback-variable": "warn",
     },
     supersedes: {
       // # correctness
