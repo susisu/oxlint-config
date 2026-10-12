@@ -519,7 +519,7 @@ export const preset: Preset = {
       "unicorn/no-array-callback-reference": "warn",
       "unicorn/no-hex-escape": "error",
       "unicorn/no-immediate-mutation": "warn",
-      "unicorn/no-instanceof-array": "error",
+      "unicorn/no-instanceof-array": "off", // deprecated
       // "unicorn/no-lonely-if": "off",
       // "unicorn/no-negated-condition": "off",
       // "unicorn/no-negation-in-equality-check": "off",
@@ -567,7 +567,7 @@ export const preset: Preset = {
       "unicorn/no-array-for-each": "error",
       // "unicorn/no-array-reduce": "off",
       "unicorn/no-document-cookie": "warn",
-      "unicorn/no-length-as-slice-end": "warn",
+      "unicorn/no-length-as-slice-end": "off", // deprecated
       // "unicorn/no-magic-array-flat-depth": "off",
       "unicorn/no-process-exit": "warn",
       "unicorn/no-useless-error-capture-stack-trace": "warn",
@@ -575,11 +575,6 @@ export const preset: Preset = {
       // "unicorn/prefer-module": "off",
       "unicorn/prefer-node-protocol": "error",
       "unicorn/prefer-number-properties": ["error", { checkInfinity: false, checkNaN: false }],
-    },
-    supersedes: {
-      // # pedantic
-      "unicorn/no-instanceof-builtins": ["unicorn/no-instanceof-array"],
-      "unicorn/no-unnecessary-slice-end": ["unicorn/no-length-as-slice-end"],
     },
   },
 };
