@@ -58,7 +58,7 @@ describe("presetRules", () => {
             plugins: eslint,
             categories: { correctness: "warn", pedantic: "error", suspicious: "error" },
           }),
-        ).toEqual({
+        ).toStrictEqual({
           "no-debugger": "warn",
           eqeqeq: ["error", "smart"],
           "no-implied-eval": "warn",
@@ -68,7 +68,7 @@ describe("presetRules", () => {
       it("is off when the category is off", () => {
         expect(
           run({ plugins: eslint, categories: { correctness: "error", pedantic: "off" } }),
-        ).toEqual({
+        ).toStrictEqual({
           "no-debugger": "error",
           eqeqeq: "off",
           "no-implied-eval": "warn",
@@ -83,7 +83,7 @@ describe("presetRules", () => {
         };
         expect(
           run({ plugins: eslint, categories: { correctness: "error", pedantic: "warn" } }, withOff),
-        ).toEqual({
+        ).toStrictEqual({
           "no-debugger": "off",
           eqeqeq: "off",
         });
@@ -92,12 +92,12 @@ describe("presetRules", () => {
 
     describe("of a rule whose category is not set explicitly", () => {
       it("is the lower of the highest category severity and the entry severity", () => {
-        expect(run({ plugins: eslint, categories: { perf: "error" } })).toEqual({
+        expect(run({ plugins: eslint, categories: { perf: "error" } })).toStrictEqual({
           "no-debugger": "error",
           eqeqeq: ["error", "smart"],
           "no-implied-eval": "warn",
         });
-        expect(run({ plugins: eslint, categories: { perf: "warn" } })).toEqual({
+        expect(run({ plugins: eslint, categories: { perf: "warn" } })).toStrictEqual({
           "no-debugger": "warn",
           eqeqeq: ["warn", "smart"],
           "no-implied-eval": "warn",
@@ -105,7 +105,7 @@ describe("presetRules", () => {
       });
 
       it("counts correctness as warn unless it is set explicitly", () => {
-        expect(run({ plugins: eslint, categories: {} })).toEqual({
+        expect(run({ plugins: eslint, categories: {} })).toStrictEqual({
           "no-debugger": "warn",
           eqeqeq: ["warn", "smart"],
           "no-implied-eval": "warn",
@@ -113,7 +113,7 @@ describe("presetRules", () => {
       });
 
       it("is off when every category is off", () => {
-        expect(run({ plugins: eslint, categories: { correctness: "off" } })).toEqual({
+        expect(run({ plugins: eslint, categories: { correctness: "off" } })).toStrictEqual({
           "no-debugger": "off",
           eqeqeq: "off",
           "no-implied-eval": "off",
@@ -153,16 +153,18 @@ describe("presetRules", () => {
           supersedes: { "typescript/no-implied-eval": ["no-implied-eval"] },
         },
       };
-      expect(run({ categories: { suspicious: "error" } }, noEntry)).toEqual({
+      expect(run({ categories: { suspicious: "error" } }, noEntry)).toStrictEqual({
         "no-implied-eval": "off",
       });
-      expect(run({ categories: { correctness: "off", suspicious: "error" } }, noEntry)).toEqual({});
+      expect(
+        run({ categories: { correctness: "off", suspicious: "error" } }, noEntry),
+      ).toStrictEqual({});
     });
   });
 
   describe("emitFor", () => {
     it("emits entries only for the given plugins", () => {
-      expect(run({ emitFor: new Set(["typescript"]) })).toEqual({
+      expect(run({ emitFor: new Set(["typescript"]) })).toStrictEqual({
         "typescript/no-implied-eval": "error",
         "typescript/no-explicit-any": "warn",
         "no-implied-eval": "off", // superseded
@@ -176,7 +178,7 @@ describe("presetRules", () => {
     });
 
     it("does not repeat a superseded rule when neither plugin is emitted", () => {
-      expect(run({ emitFor: new Set(["react"]) })).toEqual({});
+      expect(run({ emitFor: new Set(["react"]) })).toStrictEqual({});
     });
   });
 

@@ -60,11 +60,11 @@ describe("maxSeverity", () => {
 describe("resolve", () => {
   describe("plugins", () => {
     it("uses the default plugins when omitted", () => {
-      expect(resolve({}).plugins).toEqual(new Set(["eslint", ...defaultPlugins]));
+      expect(resolve({}).plugins).toStrictEqual(new Set(["eslint", ...defaultPlugins]));
     });
 
     it("always includes eslint", () => {
-      expect(resolve({ plugins: [] }).plugins).toEqual(new Set(["eslint"]));
+      expect(resolve({ plugins: [] }).plugins).toStrictEqual(new Set(["eslint"]));
     });
 
     it("takes the union over the extends tree", () => {
@@ -75,13 +75,13 @@ describe("resolve", () => {
         ],
         plugins: ["import"],
       };
-      expect(resolve(config).plugins).toEqual(
+      expect(resolve(config).plugins).toStrictEqual(
         new Set(["eslint", "import", "jest", "react", "vitest"]),
       );
     });
 
     it("counts an extended config without plugins as the default plugins", () => {
-      expect(resolve({ extends: [{}], plugins: [] }).plugins).toEqual(
+      expect(resolve({ extends: [{}], plugins: [] }).plugins).toStrictEqual(
         new Set(["eslint", ...defaultPlugins]),
       );
     });
@@ -89,8 +89,10 @@ describe("resolve", () => {
 
   describe("categories", () => {
     it("contains only the categories set explicitly", () => {
-      expect(resolve({}).categories).toEqual({});
-      expect(resolve({ categories: { pedantic: "off" } }).categories).toEqual({ pedantic: "off" });
+      expect(resolve({}).categories).toStrictEqual({});
+      expect(resolve({ categories: { pedantic: "off" } }).categories).toStrictEqual({
+        pedantic: "off",
+      });
     });
 
     it("normalizes severities", () => {
@@ -160,7 +162,7 @@ describe("resolve", () => {
           { files: ["**/*.ts"], rules: {} },
         ],
       };
-      expect(resolve(config).pluginOverrides).toEqual([
+      expect(resolve(config).pluginOverrides).toStrictEqual([
         { files: ["a/**"], excludeFiles: ["a/b/**"], plugins: new Set(["react"]) },
         { files: ["c/**"], excludeFiles: undefined, plugins: new Set(["jest"]) },
         { files: ["**/*.test.ts"], excludeFiles: undefined, plugins: new Set(["vitest"]) },

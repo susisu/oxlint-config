@@ -51,7 +51,7 @@ describe("createConfig", () => {
       rules: { eqeqeq: "off" },
     };
     const result = config(userConfig);
-    expect(result).toEqual({
+    expect(result).toStrictEqual({
       ...userConfig,
       extends: [
         {
@@ -71,7 +71,7 @@ describe("createConfig", () => {
   });
 
   it("uses oxlint's defaults when called without a config", () => {
-    expect(config()).toEqual({
+    expect(config()).toStrictEqual({
       extends: [
         {
           plugins: [],
@@ -92,7 +92,7 @@ describe("createConfig", () => {
       plugins: ["react"],
       categories: { correctness: "error" },
     });
-    expect(result.extends?.[0]?.rules).toEqual({
+    expect(result.extends?.[0]?.rules).toStrictEqual({
       "no-debugger": "error",
       eqeqeq: ["error", "smart"],
       "no-implied-eval": "warn",
@@ -106,12 +106,12 @@ describe("createConfig", () => {
       plugins: ["typescript"],
       categories: { correctness: "error", suspicious: "error" },
     };
-    expect(config(user).extends?.[0]?.rules).toEqual({
+    expect(config(user).extends?.[0]?.rules).toStrictEqual({
       "no-debugger": "error",
       eqeqeq: ["error", "smart"],
       "no-implied-eval": "warn",
     });
-    expect(config({ ...user, options: { typeAware: true } }).extends?.[0]?.rules).toEqual({
+    expect(config({ ...user, options: { typeAware: true } }).extends?.[0]?.rules).toStrictEqual({
       "no-debugger": "error",
       eqeqeq: ["error", "smart"],
       "no-implied-eval": "off",
@@ -128,7 +128,7 @@ describe("createConfig", () => {
           { files: ["**/*.test.ts"], excludeFiles: ["fixtures/**"], plugins: ["vitest"] },
         ],
       });
-      expect(result.extends?.[0]?.overrides).toEqual([
+      expect(result.extends?.[0]?.overrides).toStrictEqual([
         {
           files: ["**/*.test.ts"],
           excludeFiles: ["fixtures/**"],
@@ -144,7 +144,7 @@ describe("createConfig", () => {
         categories: { correctness: "error" },
         overrides: [{ files: ["**/*.test.tsx"], plugins: ["react", "vitest"] }],
       });
-      expect(result.extends?.[0]?.overrides).toEqual([
+      expect(result.extends?.[0]?.overrides).toStrictEqual([
         {
           files: ["**/*.test.tsx"],
           plugins: ["vitest"],
@@ -176,7 +176,7 @@ describe("createConfig", () => {
         categories: { correctness: "error" },
         overrides: [{ files: ["**/*.tsx"], plugins: ["react"] }],
       });
-      expect(result.extends?.[0]?.overrides).toEqual([
+      expect(result.extends?.[0]?.overrides).toStrictEqual([
         {
           files: ["**/*.test.ts"],
           plugins: ["vitest"],
@@ -197,12 +197,12 @@ describe("createConfig", () => {
         options: { typeAware: true },
         overrides: [{ files: ["**/*.ts"], plugins: ["typescript"] }],
       });
-      expect(result.extends?.[0]?.rules).toEqual({
+      expect(result.extends?.[0]?.rules).toStrictEqual({
         "no-debugger": "error",
         eqeqeq: ["error", "smart"],
         "no-implied-eval": "warn",
       });
-      expect(result.extends?.[0]?.overrides).toEqual([
+      expect(result.extends?.[0]?.overrides).toStrictEqual([
         {
           files: ["**/*.ts"],
           plugins: ["typescript"],
