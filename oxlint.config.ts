@@ -10,6 +10,10 @@ export default config({
   },
   overrides: [
     {
+      files: ["**/*.test.ts"],
+      plugins: ["vitest"],
+    },
+    {
       files: ["scripts/**/*.ts"],
       rules: {
         "no-console": "off",
