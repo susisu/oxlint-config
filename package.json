@@ -32,7 +32,8 @@
     "test": "vitest run",
     "test:dev": "vitest dev",
     "build": "tsc -p tsconfig.build.json",
-    "clean": "node -e \"fs.rmSync('lib', { recursive: true, force: true })\""
+    "clean": "node -e \"fs.rmSync('lib', { recursive: true, force: true })\"",
+    "prepublishOnly": "pnpm run clean && pnpm run build"
   },
   "devDependencies": {
     "@types/node": "^26.6.5",
