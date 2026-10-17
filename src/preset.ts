@@ -768,6 +768,26 @@ export const preset: Preset = {
       "unicorn/throw-new-error": "error",
     },
   },
+  node: {
+    rules: {
+      // # suspicious
+      "node/no-exports-assign": "error",
+
+      // # restriction
+      // "node/handle-callback-err": "off",
+      "node/no-new-require": "error",
+      "node/no-path-concat": "warn",
+      // "node/no-process-env": "off",
+      // "node/no-top-level-await": "off",
+
+      // # style
+      // "node/callback-return": "off",
+      "node/exports-style": ["error", "module.exports", { allowBatchAssign: false }],
+      "node/global-require": "warn",
+      "node/no-mixed-requires": "error",
+      // "node/no-sync": "off",
+    },
+  },
   vitest: {
     rules: {
       // # correctness
