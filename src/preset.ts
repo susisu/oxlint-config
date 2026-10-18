@@ -624,7 +624,7 @@ export const preset: Preset = {
       "unicorn/prefer-string-starts-ends-with": "error",
 
       // # suspicious
-      "unicorn/consistent-function-scoping": ["error", { checkArrowFunctions: true }],
+      "unicorn/consistent-function-scoping": ["warn", { checkArrowFunctions: false }],
       "unicorn/no-accessor-recursion": "error",
       "unicorn/no-array-fill-with-reference-type": "error",
       "unicorn/no-array-reverse": ["error", { allowExpressionStatement: true }],
