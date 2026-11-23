@@ -407,6 +407,7 @@ export const preset: Preset = {
       "typescript/no-unnecessary-type-constraint": "warn",
       "typescript/no-unnecessary-type-conversion": "error",
       "typescript/no-unnecessary-type-parameters": "error",
+      "typescript/no-unsafe-enum-assignment": "error",
       "typescript/no-unsafe-enum-comparison": "error",
       "typescript/no-unsafe-type-assertion": "error",
 
