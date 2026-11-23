@@ -4,7 +4,7 @@
 
 ## Requirements
 
-- oxlint >= 1.86.0
+- oxlint >= 1.91.0
 
 ## Installation
 
