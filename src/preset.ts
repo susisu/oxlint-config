@@ -393,6 +393,7 @@ export const preset: Preset = {
         },
       ],
       "typescript/no-generated-empty-object-type": "off",
+      "typescript/no-non-null-asserted-nullish-coalescing": "error",
       "typescript/no-unnecessary-boolean-literal-compare": [
         "error",
         {
@@ -522,7 +523,6 @@ export const preset: Preset = {
         { allowAsThisParameter: false, allowInGenericTypeArguments: true },
       ],
       "typescript/no-namespace": ["error", { allowDeclarations: true, allowDefinitionFiles: true }],
-      "typescript/no-non-null-asserted-nullish-coalescing": "error",
       "typescript/no-non-null-assertion": "warn",
       "typescript/no-require-imports": ["error", { allowAsImport: false }],
       // "typescript/no-restricted-types": "off",
@@ -641,6 +641,7 @@ export const preset: Preset = {
           useErrorIsError: false,
         },
       ],
+      "unicorn/no-useless-error-capture-stack-trace": "warn",
       "unicorn/prefer-add-event-listener": "error",
       "unicorn/require-module-specifiers": "error",
       "unicorn/require-post-message-target-origin": "error",
@@ -705,7 +706,6 @@ export const preset: Preset = {
       "unicorn/no-length-as-slice-end": "off", // deprecated
       // "unicorn/no-magic-array-flat-depth": "off",
       "unicorn/no-process-exit": "warn",
-      "unicorn/no-useless-error-capture-stack-trace": "warn",
       "unicorn/prefer-modern-math-apis": "warn",
       // "unicorn/prefer-module": "off",
       "unicorn/prefer-node-protocol": "error",
